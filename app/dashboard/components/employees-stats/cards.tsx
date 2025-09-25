@@ -43,7 +43,7 @@ const EmployeesStatsCards = () => {
 					</div>
 					<div>
 						<Button size="xs" asChild>
-							<Link href="/dashbord/employees">View All</Link>
+							<Link href="/dashboard/employees">View All</Link>
 						</Button>
 					</div>
 				</CardContent>
@@ -91,7 +91,7 @@ const EmployeesStatsCards = () => {
 						Employee of the Month
 					</CardTitle>
 				</CardHeader>
-				<CardContent className="flex gap-2 items-center">
+				<CardContent className="flex gap-2 items-center mb-2 lg:mb-0">
 					<Avatar>
 						<Image src={cm} alt="Employee of the Month!" />
 						<AvatarFallback>CM</AvatarFallback>

@@ -12,7 +12,7 @@ import {
 	Tooltip,
 	Legend,
 } from 'recharts';
-import data from '@/lib/data';
+import data from '@/lib/workLocationsData';
 
 const EmployeesStatsChart = () => {
 	return (
