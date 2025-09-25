@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
 	Card,
 	CardContent,
@@ -12,7 +13,6 @@ import {
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -20,14 +20,20 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
+import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PersonStandingIcon } from 'lucide-react';
+import { CalendarIcon, PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -41,6 +47,16 @@ const formSchema = z
 		),
 		companyName: z.string().optional(),
 		employeesNum: z.number().optional(),
+		dateOfBirth: z.date('Date of Birth is required').refine((date) => {
+			const today = new Date();
+			const eighteenYearsAgo = new Date(
+				today.getFullYear() - 18,
+				today.getMonth(),
+				today.getDate()
+			);
+
+			return date <= eighteenYearsAgo;
+		}, 'You must be at least 18 years old'),
 		// password: z
 		// 	.string()
 		// 	.nonempty('Password is required')
@@ -73,7 +89,6 @@ const SignUpPage = () => {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			email: '',
-			accountType: 'personal',
 			companyName: '',
 			employeesNum: 0,
 			// password: '',
@@ -115,10 +130,6 @@ const SignUpPage = () => {
 												{...field}
 											/>
 										</FormControl>
-										<FormDescription>
-											This is an email address you sign up
-											with.
-										</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -204,6 +215,76 @@ const SignUpPage = () => {
 									/>
 								</>
 							)}
+							<FormField
+								control={form.control}
+								name="dateOfBirth"
+								render={({ field }) => {
+									const dobFrom = new Date();
+
+									dobFrom?.setFullYear(
+										dobFrom.getFullYear() - 120
+									);
+
+									return (
+										<FormItem>
+											<FormLabel>Date of Birth</FormLabel>
+											<FormControl>
+												<Popover>
+													<PopoverTrigger asChild>
+														<FormControl>
+															<Button
+																variant="outline"
+																className={cn(
+																	'justify-between',
+																	'font-normal',
+																	'tracking-normal',
+																	'capitalize'
+																)}
+															>
+																{field.value
+																	? field.value
+																			.toISOString()
+																			.substring(
+																				0,
+																				10
+																			)
+																	: 'Select date'}
+																<CalendarIcon />
+															</Button>
+														</FormControl>
+													</PopoverTrigger>
+													<PopoverContent
+														className="w-auto p-0"
+														align="start"
+													>
+														<Calendar
+															mode="single"
+															selected={
+																field.value
+															}
+															onSelect={
+																field.onChange
+															}
+															defaultMonth={
+																field.value
+															}
+															fixedWeeks
+															weekStartsOn={1}
+															captionLayout="dropdown"
+															startMonth={dobFrom}
+															disabled={{
+																before: dobFrom,
+																after: new Date(),
+															}}
+														/>
+													</PopoverContent>
+												</Popover>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									);
+								}}
+							/>
 							{/* <FormField
 								control={form.control}
 								name="password"
