@@ -23,6 +23,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -36,6 +37,8 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
+	const router = useRouter();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -44,8 +47,9 @@ const LoginPage = () => {
 		},
 	});
 
-	const handleSubmit = () => {
-		console.log('log in success');
+	const onSubmit = (values: z.infer<typeof formSchema>) => {
+		console.log(values);
+		router.push('/dashboard');
 	};
 
 	return (
@@ -61,7 +65,7 @@ const LoginPage = () => {
 				<CardContent>
 					<Form {...form}>
 						<form
-							onSubmit={form.handleSubmit(handleSubmit)}
+							onSubmit={form.handleSubmit(onSubmit)}
 							className="flex flex-col gap-4"
 						>
 							<FormField
@@ -92,9 +96,7 @@ const LoginPage = () => {
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
-											<PasswordInput
-												{...field}
-											/>
+											<PasswordInput {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>

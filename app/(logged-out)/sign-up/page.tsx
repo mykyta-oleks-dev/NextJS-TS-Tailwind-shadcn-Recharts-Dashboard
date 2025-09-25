@@ -10,9 +10,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -36,6 +38,7 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon, PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -118,11 +121,17 @@ const baseSchema = z.object({
 
 		return date <= eighteenYearsAgo;
 	}, 'You must be at least 18 years old'),
+
+	acceptTerms: z
+		.boolean()
+		.refine((val) => val, 'You must accept the terms and conditions'),
 });
 
 const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
 
 const SignUpPage = () => {
+	const router = useRouter();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -131,11 +140,13 @@ const SignUpPage = () => {
 			employeesNum: 0,
 			password: '',
 			passwordConfirm: '',
+			acceptTerms: false,
 		},
 	});
 
 	const handleSubmit = (values: z.infer<typeof formSchema>) => {
 		console.log(values);
+		router.push('/login');
 	};
 
 	const errors = form.formState.errors;
@@ -292,12 +303,14 @@ const SignUpPage = () => {
 																)}
 															>
 																{field.value
-																	? field.value
-																			.toISOString()
-																			.substring(
-																				0,
-																				10
-																			)
+																	? field.value.toLocaleDateString(
+																			'en-US',
+																			{
+																				month: 'long',
+																				day: 'numeric',
+																				year: 'numeric',
+																			}
+																	  )
 																	: 'Select date'}
 																<CalendarIcon />
 															</Button>
@@ -364,6 +377,41 @@ const SignUpPage = () => {
 										<FormControl>
 											<PasswordInput {...field} />
 										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="acceptTerms"
+								render={({ field }) => (
+									<FormItem>
+										<div className="flex gap-2 items-center">
+											<FormControl>
+												<Checkbox
+													checked={field.value}
+													onCheckedChange={
+														field.onChange
+													}
+												/>
+											</FormControl>
+											<FormLabel>
+												I accept the terms and
+												conditions.
+											</FormLabel>
+										</div>
+										<FormDescription>
+											By creating an account, you agree to
+											our{' '}
+											<Link
+												href="#"
+												className="text-primary hover:underline"
+											>
+												terms and conditions
+											</Link>
+											.
+										</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
