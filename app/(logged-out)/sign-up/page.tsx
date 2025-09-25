@@ -19,6 +19,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import {
 	Popover,
 	PopoverContent,
@@ -119,9 +120,7 @@ const baseSchema = z.object({
 	}, 'You must be at least 18 years old'),
 });
 
-const formSchema = baseSchema
-	.and(accountTypeSchema)
-	.and(passwordSchema);
+const formSchema = baseSchema.and(accountTypeSchema).and(passwordSchema);
 
 const SignUpPage = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -150,7 +149,7 @@ const SignUpPage = () => {
 				<CardHeader>
 					<CardTitle>Sign Up</CardTitle>
 					<CardDescription>
-						Log in to your SupportMe account
+						Create a new SupportMe account
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -279,7 +278,11 @@ const SignUpPage = () => {
 													<PopoverTrigger asChild>
 														<FormControl>
 															<Button
-																variant={errors.dateOfBirth ? "destructive" : "outline"}
+																variant={
+																	errors.dateOfBirth
+																		? 'destructive'
+																		: 'outline'
+																}
 																className={cn(
 																	'justify-between',
 																	'font-normal',
@@ -340,14 +343,10 @@ const SignUpPage = () => {
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
-											<Input
-												placeholder="••••••••"
-												type="password"
+											<PasswordInput
 												{...field}
 												onKeyDown={(e) => {
-													if (/\s/.test(e.key)) {
-														e.preventDefault();
-													}
+													console.log(e);
 												}}
 											/>
 										</FormControl>
@@ -363,16 +362,7 @@ const SignUpPage = () => {
 									<FormItem>
 										<FormLabel>Confirm password</FormLabel>
 										<FormControl>
-											<Input
-												placeholder="••••••••"
-												type="password"
-												{...field}
-												onKeyDown={(e) => {
-													if (/\s/.test(e.key)) {
-														e.preventDefault();
-													}
-												}}
-											/>
+											<PasswordInput {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
