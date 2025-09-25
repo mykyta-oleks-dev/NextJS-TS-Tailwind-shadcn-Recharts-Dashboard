@@ -1,4 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import EmployeesStats from './components/employees-stats';
+import TeamsStats from './components/teams-stats';
 
 const DashboardPage = () => {
 	return (
@@ -8,10 +10,10 @@ const DashboardPage = () => {
 				<TabsTrigger value="teams">Teams stats</TabsTrigger>
 			</TabsList>
 			<TabsContent value="employees" className="mt-4">
-				<p>Employees stats will be displayed here.</p>
+				<EmployeesStats />
 			</TabsContent>
 			<TabsContent value="teams" className="mt-4">
-				<p>Teams stats will be displayed here.</p>
+				<TeamsStats />
 			</TabsContent>
 		</Tabs>
 	);
