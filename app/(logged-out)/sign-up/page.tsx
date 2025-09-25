@@ -38,30 +38,14 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-const formSchema = z
+const accountTypeSchema = z
 	.object({
-		email: z.email('Invalid email address'),
 		accountType: z.enum(
 			['personal', 'company'],
 			'Select a valid account type'
 		),
 		companyName: z.string().optional(),
 		employeesNum: z.number().optional(),
-		dateOfBirth: z.date('Date of Birth is required').refine((date) => {
-			const today = new Date();
-			const eighteenYearsAgo = new Date(
-				today.getFullYear() - 18,
-				today.getMonth(),
-				today.getDate()
-			);
-
-			return date <= eighteenYearsAgo;
-		}, 'You must be at least 18 years old'),
-		// password: z
-		// 	.string()
-		// 	.nonempty('Password is required')
-		// 	.min(6, 'Password is too short')
-		// 	.max(20, 'Password is too long'),
 	})
 	.superRefine((data, ctx) => {
 		if (data.accountType === 'company') {
@@ -84,6 +68,61 @@ const formSchema = z
 		}
 	});
 
+const passwordSchema = z
+	.object({
+		password: z
+			.string('Password is required')
+			.trim()
+			.min(6, 'Password is too short')
+			.max(20, 'Password is too long')
+			.refine(
+				(value) => /[A-Z]/.test(value),
+				'Password must contain at least one uppercase letter'
+			)
+			.refine(
+				(value) => /[a-z]/.test(value),
+				'Password must contain at least one lowercase letter'
+			)
+			.refine(
+				(value) => /[0-9]/.test(value),
+				'Password must contain at least one number'
+			)
+			.refine(
+				(value) => /[!@#$%^&*(),.?":{}|<>\-]/.test(value),
+				'Password must contain at least one special character'
+			),
+		passwordConfirm: z.string('Please repeat your password'),
+	})
+	.superRefine((data, ctx) => {
+		if (!data.passwordConfirm || data.password !== data.passwordConfirm) {
+			console.log('what');
+			ctx.addIssue({
+				code: 'custom',
+				path: ['passwordConfirm'],
+				message: 'Passwords do not match',
+			});
+		}
+	});
+
+const baseSchema = z.object({
+	email: z.email('Invalid email address'),
+
+	dateOfBirth: z.date('Date of Birth is required').refine((date) => {
+		const today = new Date();
+		const eighteenYearsAgo = new Date(
+			today.getFullYear() - 18,
+			today.getMonth(),
+			today.getDate()
+		);
+
+		return date <= eighteenYearsAgo;
+	}, 'You must be at least 18 years old'),
+});
+
+const formSchema = baseSchema
+	.and(accountTypeSchema)
+	.and(passwordSchema);
+
 const SignUpPage = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -91,13 +130,16 @@ const SignUpPage = () => {
 			email: '',
 			companyName: '',
 			employeesNum: 0,
-			// password: '',
+			password: '',
+			passwordConfirm: '',
 		},
 	});
 
 	const handleSubmit = (values: z.infer<typeof formSchema>) => {
 		console.log(values);
 	};
+
+	const errors = form.formState.errors;
 
 	const accountType = form.watch('accountType');
 
@@ -134,6 +176,7 @@ const SignUpPage = () => {
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="accountType"
@@ -159,6 +202,7 @@ const SignUpPage = () => {
 									</FormItem>
 								)}
 							/>
+
 							{accountType === 'company' && (
 								<>
 									<FormField
@@ -179,6 +223,7 @@ const SignUpPage = () => {
 											</FormItem>
 										)}
 									/>
+
 									<FormField
 										control={form.control}
 										name="employeesNum"
@@ -215,6 +260,7 @@ const SignUpPage = () => {
 									/>
 								</>
 							)}
+
 							<FormField
 								control={form.control}
 								name="dateOfBirth"
@@ -233,12 +279,13 @@ const SignUpPage = () => {
 													<PopoverTrigger asChild>
 														<FormControl>
 															<Button
-																variant="outline"
+																variant={errors.dateOfBirth ? "destructive" : "outline"}
 																className={cn(
 																	'justify-between',
 																	'font-normal',
 																	'tracking-normal',
-																	'capitalize'
+																	'capitalize',
+																	'border-destructive'
 																)}
 															>
 																{field.value
@@ -285,7 +332,8 @@ const SignUpPage = () => {
 									);
 								}}
 							/>
-							{/* <FormField
+
+							<FormField
 								control={form.control}
 								name="password"
 								render={({ field }) => (
@@ -296,12 +344,40 @@ const SignUpPage = () => {
 												placeholder="••••••••"
 												type="password"
 												{...field}
+												onKeyDown={(e) => {
+													if (/\s/.test(e.key)) {
+														e.preventDefault();
+													}
+												}}
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
-							/> */}
+							/>
+
+							<FormField
+								control={form.control}
+								name="passwordConfirm"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Confirm password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="••••••••"
+												type="password"
+												{...field}
+												onKeyDown={(e) => {
+													if (/\s/.test(e.key)) {
+														e.preventDefault();
+													}
+												}}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<Button type="submit">Sign Up</Button>
 						</form>
 					</Form>
