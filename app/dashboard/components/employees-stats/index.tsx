@@ -1,10 +1,12 @@
-import EmployeeStatsCards from "./cards";
+import EmployeesStatsCards from './cards';
+import EmployeesStatsChart from './chart';
 
 const EmployeesStats = () => {
 	return (
-		<>
-		<EmployeeStatsCards />
-		</>
+		<div className="flex flex-col gap-4">
+			<EmployeesStatsCards />
+			<EmployeesStatsChart />
+		</div>
 	);
 };
 

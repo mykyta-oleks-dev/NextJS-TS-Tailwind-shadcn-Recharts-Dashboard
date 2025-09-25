@@ -20,7 +20,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import cm from '@/public/users/cm.jpg';
 
-const EmployeeStatsCards = () => {
+const EmployeesStatsCards = () => {
 	const totalEmployees = 100;
 	const employeesPresent = 80;
 	const presentPercentage = Math.round(
@@ -117,4 +117,4 @@ const EmployeeStatsCards = () => {
 	);
 };
 
-export default EmployeeStatsCards;
+export default EmployeesStatsCards;
