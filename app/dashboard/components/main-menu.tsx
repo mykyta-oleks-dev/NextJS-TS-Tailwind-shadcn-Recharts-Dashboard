@@ -14,7 +14,7 @@ const menuItems = [
 
 const MainMenu = () => {
 	return (
-		<nav className="bg-muted overflow-auto p-4 flex flex-col gap-4">
+		<nav className="bg-muted overflow-auto p-4 flex flex-col gap-4 border-r-2">
 			<header>
 				<MenuTitle />
 			</header>
