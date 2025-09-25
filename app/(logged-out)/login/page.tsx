@@ -9,10 +9,44 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { PersonStandingIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+const formSchema = z.object({
+	email: z.email('Invalid email address'),
+	password: z
+		.string()
+		.nonempty('Password is required')
+		.min(6, 'Password is too short')
+		.max(20, 'Password is too long'),
+});
 
 const LoginPage = () => {
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			email: '',
+			password: '',
+		},
+	});
+
+	const handleSubmit = () => {
+		console.log('log in success');
+	};
+
 	return (
 		<>
 			<PersonStandingIcon size={50} />
@@ -23,7 +57,54 @@ const LoginPage = () => {
 						Log in to your SupportMe account
 					</CardDescription>
 				</CardHeader>
-				<CardContent>Login form</CardContent>
+				<CardContent>
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(handleSubmit)}
+							className="flex flex-col gap-4"
+						>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="john.doe@mail.com"
+												// type="email"
+												{...field}
+											/>
+										</FormControl>
+										<FormDescription>
+											This is an email address you sign up
+											with.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="••••••••"
+												type="password"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type="submit">Log In</Button>
+						</form>
+					</Form>
+				</CardContent>
 				<CardFooter className="justify-between">
 					<small>Don&apos;t have an account?</small>
 					<Button asChild variant="outline" size="sm">
