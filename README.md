@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Description
 
-## Getting Started
+This is a frontend-only web application with dashboard styled pages using NextJS and shadcn components with TailwindCSS styling.
 
-First, run the development server:
+## Technologies used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+-   Next.JS - "The React Framework for the Web".
+
+-   TypeScript - a strongly typed programming language that builds on JavaScript.
+
+-   Node.JS - free, open-source, cross-platform JavaScript runtime environment.
+
+-   npm - package manager for the JavaScript programming language maintained by npm, Inc., a subsidiary of GitHub.
+
+-   Tailwind CSS - a utility-first CSS framework.
+
+-   shadcn - "a set of beautifully designed components that you can customize, extend, and build on".
+
+## Installation
+
+The project uses `npm` as the package manager.
+
+```shell
+$ npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To run the application in development mode:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```shell
+$ npm run dev
+```
 
-## Learn More
+To build the project files perform Typescript transpilation:
 
-To learn more about Next.js, take a look at the following resources:
+```shell
+$ npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-	Responsive design: Use the service with ease on any device, be it desktop or mobile!
 
-## Deploy on Vercel
+-	Landing section: Navigate to login and sign up pages from here. Common layout allows to switch themes (dark vs light) on your desire!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-	Sign Up page: Enter the needed information for a successful form submit and redirect to login page on successful validation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-	Login page: Enter any valid value for validation and redirect to dashboard page on successful validation
+
+-	Dashboard main page: Check out stats with charts for employees and teams in tabs and responsive design. Navigate to pages with the responsive menu (shown aside or drawn with button click)
+
+-	Dashboard employees page: Explore all the (mock) employees with a data table and pagination
