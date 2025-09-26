@@ -7,7 +7,7 @@ const LoggedOutLayout = ({ children }: PropsWithChildren) => {
 			<div className="flex flex-col gap-4 min-h-screen items-center justify-center p-24">
 				{children}
 			</div>
-			<LightDarkToggle className="fixed right-0 top-1/2" />
+			<LightDarkToggle className="fixed right-3 top-1/2 -translate-y-1/2" />
 		</>
 	);
 };
