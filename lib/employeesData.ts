@@ -7,7 +7,7 @@ const employeesData: Employee[] = [
 		lastName: 'Murray',
 		teamName: 'alpha',
 		isTeamLeader: true,
-		avatar: '/images/cm.jpg',
+		avatar: '/users/cm.jpg',
 	},
 	{
 		id: 2,
@@ -29,7 +29,7 @@ const employeesData: Employee[] = [
 		lastName: 'Fey',
 		teamName: 'canary',
 		isTeamLeader: true,
-		avatar: '/images/tf.jpg',
+		avatar: '/users/tf.jpg',
 	},
 	{
 		id: 5,
@@ -58,7 +58,7 @@ const employeesData: Employee[] = [
 		lastName: 'Lopez',
 		teamName: 'delta',
 		isTeamLeader: false,
-		avatar: '/images/rl.jpg',
+		avatar: '/users/rl.jpg',
 	},
 	{
 		id: 9,
