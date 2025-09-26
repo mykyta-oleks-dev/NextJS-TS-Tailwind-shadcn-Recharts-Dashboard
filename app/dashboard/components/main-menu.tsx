@@ -3,6 +3,7 @@ import MenuItem from './menu-item';
 import MenuTitle from './menu-title';
 import Link from 'next/link';
 import LightDarkToggle from '@/components/ui/light-dark-toggle';
+import { cn } from '@/lib/utils';
 
 const menuItems = [
 	{ href: '/dashboard', label: 'Dashboard' },
@@ -12,14 +13,35 @@ const menuItems = [
 	{ href: '/dashboard/settings', label: 'Settings' },
 ];
 
-const MainMenu = () => {
+const MainMenu = ({
+	className,
+	isMobile = false,
+}: {
+	className?: string;
+	isMobile?: boolean;
+}) => {
 	return (
-		<nav className="bg-muted overflow-auto p-4 flex flex-col gap-4 border-r-2">
-			<header>
-				<MenuTitle />
-			</header>
+		<nav
+			className={cn(
+				'md:bg-muted',
+				'overflow-auto',
+				'p-4',
+				'flex',
+				'flex-col',
+				'gap-4',
+				'border-r-2',
+				className
+			)}
+		>
+			{!isMobile && (
+				<>
+					<header>
+						<MenuTitle />
+					</header>
 
-			<hr className="dark:bg-black light:bg-zinc-300 h-0.5" />
+					<hr className="dark:bg-black light:bg-zinc-300 h-0.5" />
+				</>
+			)}
 
 			<ul className="flex flex-col gap-2 grow">
 				{menuItems.map((item) => (
